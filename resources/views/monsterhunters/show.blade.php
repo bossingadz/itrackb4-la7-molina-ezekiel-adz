@@ -1,25 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ $game['title'] }} - Detail Page</title>
-</head>
-<body>
-    <header>
-        <p>Prepared by: <strong>Ezekiel Adz F. Molina</strong></p>
-    </header>
+@extends('layouts.app')
 
-    <main>
-        <h1>{{ $game['title'] }}</h1>
+@section('title', $game['title'] . ' - Product Details')
 
-        <ul>
-            <li><strong>ID:</strong> {{ $game['id'] }}</li>
-            <li><strong>Type / Platform:</strong> {{ $game['platform'] }}</li>
-            <li><strong>Price:</strong> ₱{{ number_format($game['price'], 2) }}</li>
-        </ul>
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">{{ $game['title'] }}</h3>
+                
+                @if($game['price'] > 2000)
+                    <span class="badge bg-warning text-dark">Premium Game</span>
+                @endif
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><strong>ID:</strong> {{ $game['id'] }}</li>
+                    <li class="list-group-item"><strong>Platform / Type:</strong> {{ $game['platform'] }}</li>
+                    <li class="list-group-item"><strong>Price:</strong> ₱{{ number_format($game['price'], 2) }}</li>
+                    <li class="list-group-item"><strong>In Stock:</strong> {{ $game['stock'] }} units available</li>
+                </ul>
 
-        <p>
-            <a href="{{ route('monsterhunter.index') }}">← Back to All Games</a>
-        </p>
-    </main>
-</body>
-</html>
+                <a href="{{ route('monsterhunter.index') }}" class="btn btn-secondary">
+                    &larr; Back to Games List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
