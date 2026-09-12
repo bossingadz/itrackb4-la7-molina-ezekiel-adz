@@ -29,7 +29,7 @@
                 <tr>
                     <td><strong>{{ $loop->iteration }}</strong></td>
                     <td>
-                        <a href="{{ route('monsterhunter.show', ['id' => $game['id']]) }}" class="text-decoration-none fw-bold">
+                        <a href="{{ route('monsterhunters.show', ['monsterhunter' => $game['id']]) }}" class="text-decoration-none fw-bold">
                             {{ $game['title'] }}
                         </a>
                     </td>
