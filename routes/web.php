@@ -8,14 +8,19 @@ Route::get('/', function () {
 });
 
 Route::get('/whoami', function () {
-    return 'Ezekiel Adz F. Molina | 2023-70345 | Block 4C | ITRACKB4 Laravel 12';
+    return 'Ezekiel Adz F. Molina | 2023-70345 | Block 4C';
 });
 
 Route::get('/monsterhunters/featured', [MonsterHunterController::class, 'featured'])
-    ->name('monsterhunters.featured');
+    ->name('monsterhunter.featured');
 
-Route::get('/monsterhunters/filter/{value?}', [MonsterHunterController::class, 'filter'])
-    ->name('monsterhunters.filter');
+// Old route redirect to new query parameter format
+Route::get('/monsterhunters/filter/{value?}', function ($value = null) {
+    if ($value) {
+        return redirect()->route('monsterhunter.index', ['platform' => $value]);
+    }
+    return redirect()->route('monsterhunter.index');
+});
 
 Route::resource('monsterhunters', MonsterHunterController::class)
     ->only(['index', 'show'])
