@@ -1,9 +1,13 @@
-<nav>
-    <a href="{{ route('monsterhunter.index') }}" style="{{ request()->is('monsterhunters*') && !request()->is('monsterhunters/featured') ? 'font-weight: bold;' : '' }}">
-        All Games
-    </a> | 
-    <a href="{{ route('monsterhunter.featured') }}" style="{{ request()->is('monsterhunters/featured') ? 'font-weight: bold;' : '' }}">
-        Featured Pick
-    </a>
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ route('monsterhunters.index') }}">Monster Hunter</a>
+        <div class="navbar-nav">
+            <a class="nav-link {{ request()->is('monsterhunters') || request()->is('monsterhunters/*') && !request()->is('monsterhunters/featured') ? 'active' : '' }}" href="{{ route('monsterhunters.index') }}">
+                All Games
+            </a>
+            <a class="nav-link {{ request()->is('monsterhunters/featured') ? 'active' : '' }}" href="{{ route('monsterhunter.featured') }}">
+                Featured Pick
+            </a>
+        </div>
+    </div>
 </nav>
-<hr>

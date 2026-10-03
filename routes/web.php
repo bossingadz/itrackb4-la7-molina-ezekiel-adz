@@ -14,14 +14,13 @@ Route::get('/whoami', function () {
 Route::get('/monsterhunters/featured', [MonsterHunterController::class, 'featured'])
     ->name('monsterhunter.featured');
 
-// Old route redirect to new query parameter format
 Route::get('/monsterhunters/filter/{value?}', function ($value = null) {
     if ($value) {
-        return redirect()->route('monsterhunter.index', ['platform' => $value]);
+        return redirect()->route('monsterhunters.index', ['platform' => $value]);
     }
-    return redirect()->route('monsterhunter.index');
+    return redirect()->route('monsterhunters.index');
 });
 
 Route::resource('monsterhunters', MonsterHunterController::class)
-    ->only(['index', 'show'])
-    ->names('monsterhunter');
+    ->only(['index', 'show', 'create', 'store'])
+    ->names('monsterhunters');

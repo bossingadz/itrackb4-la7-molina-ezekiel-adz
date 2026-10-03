@@ -1,7 +1,5 @@
 @extends('layouts.app')
-
 @section('title', $game['title'] . ' - Product Details')
-
 @section('content')
 <div class="row justify-content-center">
     <div class="col-md-8">
@@ -21,7 +19,7 @@
                     <li class="list-group-item"><strong>In Stock:</strong> {{ $game['stock'] }} units available</li>
                 </ul>
 
-                <a href="{{ route('monsterhunter.index') }}" class="btn btn-secondary">
+                <a href="{{ route('monsterhunters.index') }}" class="btn btn-secondary">
                     &larr; Back to Games List
                 </a>
             </div>

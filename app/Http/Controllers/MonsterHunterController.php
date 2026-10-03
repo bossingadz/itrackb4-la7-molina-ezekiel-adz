@@ -1,21 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
-
 class MonsterHunterController extends Controller
 {
     private function getProducts(): array
     {
-        return [
-            1 => ['id' => 1, 'title' => 'Monster Hunter: World', 'price' => 1290.00, 'platform' => 'Base Game', 'stock' => 12],
-            2 => ['id' => 2, 'title' => 'Monster Hunter World: Iceborne', 'price' => 1290.00, 'platform' => 'Expansion', 'stock' => 8],
-            3 => ['id' => 3, 'title' => 'Monster Hunter Rise', 'price' => 1790.00, 'platform' => 'Base Game', 'stock' => 14],
-            4 => ['id' => 4, 'title' => 'Monster Hunter Rise: Sunbreak', 'price' => 1790.00, 'platform' => 'Expansion', 'stock' => 9],
-            5 => ['id' => 5, 'title' => 'Monster Hunter Wilds', 'price' => 3300.00, 'platform' => 'Base Game', 'stock' => 7],
-            6 => ['id' => 6, 'title' => 'Monster Hunter Generations Ultimate', 'price' => 1100.00, 'platform' => 'Base Game', 'stock' => 16],
-        ];
+        $path = storage_path('app/monsterhunter.json');
+        $products = json_decode(file_get_contents($path), true);
+
+        return is_array($products) ? array_column($products, null, 'id') : [];
+    }
+
+    private function saveMonsterHunters(array $monsterhunters)
+    {
+        file_put_contents(
+            storage_path('app/monsterhunter.json'),
+            json_encode($monsterhunters, JSON_PRETTY_PRINT)
+        );
     }
 
     public function index(Request $request)
@@ -49,16 +51,43 @@ class MonsterHunterController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return view('monsterhunters.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|min:3|max:200',
+            'platform' => 'required|in:Base Game,Expansion',
+            'price' => 'required|numeric|min:1',
+            'stock' => 'required|integer|min:1|max:100',
+        ]);
+
+        $monsterhunters = $this->getProducts();
+        $id = max(array_keys($monsterhunters)) + 1;
+
+        $monsterhunters[$id] = [
+            'id' => $id,
+            'title' => $request->input('title'),
+            'platform' => $request->input('platform'),
+            'price' => (float) $request->input('price'),
+            'stock' => (int) $request->input('stock'),
+        ];
+
+        $this->saveMonsterHunters($monsterhunters);
+
+        return redirect()->route('monsterhunters.index')
+            ->with('success', 'New record added successfully!');
+    }
+
     public function show(string $id)
     {
         $games = $this->getProducts();
-
-        if (!isset($games[$id])) {
-            abort(404);
-        }
+        if (!isset($games[$id])) abort(404);
 
         $game = $games[$id];
-
         return view('monsterhunters.show', compact('game'));
     }
 
@@ -66,12 +95,9 @@ class MonsterHunterController extends Controller
     {
         $games = $this->getProducts();
         $game = $games[5] ?? abort(404);
-
         return view('monsterhunters.show', compact('game'));
     }
 
-    public function create() {}
-    public function store(Request $request) {}
     public function edit(string $id) {}
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
